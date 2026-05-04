@@ -1,0 +1,19 @@
+name: Compilar Zodoma
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar Librerias
+        run: vcpkg install boost-iostreams boost-asio boost-system luajit libmariadb pugixml crypto++
+      - name: Configurar CMake
+        run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+      - name: Compilar
+        run: cmake --build build --config Release
+      - name: Subir mi EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: Servidor-Zodoma
+          path: build/Release/
