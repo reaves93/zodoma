@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Instalar Librerias
-        run: vcpkg install boost-iostreams boost-asio boost-system luajit libmariadb pugixml cryptopp
+        run: vcpkg install boost-iostreams boost-asio boost-system luajit libmariadb cryptopp
       - name: Configurar CMake
         run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
       - name: Compilar
