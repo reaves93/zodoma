@@ -16,11 +16,20 @@ endif()
 
 # Buscar paquetes instalados por vcpkg
 find_package(cryptopp REQUIRED)
-find_package(PugiXML REQUIRED)
 find_package(MySQL REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system filesystem iostreams asio)
 find_package(Lua REQUIRED)
+
+# Intentar buscar PugiXML, pero no morir si falla (la buscará en tu carpeta src)
+find_package(PugiXML)
+if(PugiXML_FOUND)
+    message("PugiXML encontrada en el sistema")
+    set(PUGIXML_LIB pugixml)
+else()
+    message("PugiXML no encontrada, se usará la versión interna de src")
+    set(PUGIXML_LIB "")
+endif()
 
 # Buscar automáticamente todos los archivos en src (tu nueva estructura)
 file(GLOB_RECURSE tfs_SRC 
@@ -41,12 +50,11 @@ target_include_directories(tfs PRIVATE
     ${PUGIXML_INCLUDE_DIR}
 )
 
-# Linkear librerías (Unir todo en el .exe)
+# Conectar las librerías al ejecutable final
 target_link_libraries(tfs PRIVATE 
     ${MYSQL_LIBRARIES} 
     ${LUA_LIBRARIES} 
     cryptopp-static
-    pugixml
     Boost::system
     Boost::filesystem
     Boost::iostreams
